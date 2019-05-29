@@ -8,7 +8,7 @@ RSpec.describe DnsRecord, type: :model do
 
     let(:valid_address) { '128.54.34.14' }
     let(:invalid_addresses) do
-      %w[localhost 128.54.34.14. 128.54.34.14.87 278.54.34.14]
+      %w[localhost 128.54.34.14. 128.54.34.14.87 278.54.34.14 138.foo.bar.9]
     end
 
     it 'validates that :ip_address has a valid IPv4 format' do
