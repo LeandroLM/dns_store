@@ -5,6 +5,7 @@ RSpec.describe DnsRecord, type: :model do
     subject { DnsRecord.new(ip_address: '255.0.0.1') }
     it { is_expected.to validate_presence_of(:ip_address) }
     it { is_expected.to validate_uniqueness_of(:ip_address).case_insensitive }
+    it { is_expected.to have_and_belong_to_many(:hostnames) }
 
     let(:valid_address) { '128.54.34.14' }
     let(:invalid_addresses) do
