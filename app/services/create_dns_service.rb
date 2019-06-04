@@ -1,7 +1,9 @@
 class CreateDnsService
   attr_reader :dns, :hostnames
 
-  def initialize(ip_address, hostnames = [])
+  def initialize(params)
+    ip_address = params[:ip_address]
+    hostnames = params[:hostnames] || []
     @dns = DnsRecord.new(ip_address: ip_address)
     @hostnames = hostnames.map(&:downcase).uniq.map do |hostname|
       Hostname.find_or_initialize_by(name: hostname)
@@ -21,7 +23,7 @@ class CreateDnsService
   def errors
     @errors = dns.errors.full_messages +
               hostnames.map { |h| h.errors.full_messages }.flatten
-    @errors << ['must include at least 1 hostname'] if hostnames.length.zero?
+    @errors << 'must include at least 1 hostname' if hostnames.length.zero?
     @errors
   end
 
@@ -34,7 +36,7 @@ class CreateDnsService
   def save_records!
     ApplicationRecord.transaction do
       dns.save!
-      hostnames.each(&:save!)
+      hostnames.filter(&:new_record?).each(&:save!)
       dns.hostnames = hostnames
     end
     true

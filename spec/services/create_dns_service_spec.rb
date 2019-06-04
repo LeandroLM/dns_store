@@ -6,7 +6,9 @@ RSpec.describe CreateDnsService, type: :service, service: true do
   let(:hostnames) { ['example.com', 'example2.com'] }
 
   context 'when the ip address is not valid' do
-    let(:service) { CreateDnsService.new(:invalid_address, hostnames) }
+    let(:service) do
+      CreateDnsService.new(ip_address: invalid_ip_address, hostnames: hostnames)
+    end
 
     it 'does not create a new DNS nor new hostnames' do
       expect(service.create).to be_falsy
@@ -17,11 +19,13 @@ RSpec.describe CreateDnsService, type: :service, service: true do
   end
 
   context 'when the ip address is valid' do
-    let(:service) { CreateDnsService.new(ip_address, hostnames) }
+    let(:service) do
+      CreateDnsService.new(ip_address: ip_address, hostnames: hostnames)
+    end
 
     context 'and the address does not exist yet' do
       context "and there's no associated hostnames" do
-        let(:service) { CreateDnsService.new(ip_address) }
+        let(:service) { CreateDnsService.new(ip_address: ip_address) }
 
         it 'does not create a new DNS record nor new hostnames' do
           expect(service.create).to be_falsy
@@ -32,7 +36,12 @@ RSpec.describe CreateDnsService, type: :service, service: true do
       end
 
       context 'and some of the hostnames are invalid' do
-        let(:service) { CreateDnsService.new(ip_address, ['example.com', '']) }
+        let(:service) do
+          CreateDnsService.new(
+            ip_address: ip_address,
+            hostnames: ['example.com', '']
+          )
+        end
 
         it 'does not create a new DNS record nor new hostnames' do
           expect(service.create).to be_falsy
@@ -43,7 +52,9 @@ RSpec.describe CreateDnsService, type: :service, service: true do
       end
 
       context 'and there are associated hostnames' do
-        let(:service) { CreateDnsService.new(ip_address, hostnames) }
+        let(:service) do
+          CreateDnsService.new(ip_address: ip_address, hostnames: hostnames)
+        end
 
         it 'it creates a new DSN record' do
           expect(service.create).to be_truthy
