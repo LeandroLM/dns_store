@@ -16,7 +16,7 @@ RSpec.describe Api::DnsController, type: :controller do
     end
 
     context 'when the paramters are invalid' do
-      it 'returns http success' do
+      it 'returns unprocessable entity status with error messages' do
         post :create, params: { dns: { ip_address: 'invalid address' } }
 
         expect(response).to have_http_status(:unprocessable_entity)
