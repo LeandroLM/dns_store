@@ -8,10 +8,6 @@ class ApplicationController < ActionController::API
     render_error [exception.message], :bad_request
   end
 
-  def render_success(data)
-    render json: { data: data }, status: :ok
-  end
-
   def render_error(errors, status = :unprocessable_entity)
     render json: { errors: errors }, status: status
   end

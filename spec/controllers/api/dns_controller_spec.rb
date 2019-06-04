@@ -10,8 +10,8 @@ RSpec.describe Api::DnsController, type: :controller do
         post :create, params: params
 
         expect(response).to have_http_status(:success)
-        expect(body['data']['dns']['ip_address']).to eq '127.0.0.1'
-        expect(body['data']['dns']['hostnames']).to eq ['example.com']
+        expect(body['data']['attributes']['ip_address']).to eq '127.0.0.1'
+        expect(body['data']['attributes']['hostnames']).to eq ['example.com']
       end
     end
 
