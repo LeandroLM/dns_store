@@ -20,19 +20,16 @@ class DnsListingService
   private
 
   def matching_dns_records
-    @matching_dns_records ||= begin
-      DnsRecord
-        .select(:id, :ip_address)
-        .joins(:hostnames)
-        .preload(:hostnames)
-        .where(hostnames: { name: included_hostnames })
-        .uniq
-        .filter do |dns|
-          hostnames = dns.hostnames.map(&:name)
-          included_hostnames.all? { |h| h.in? hostnames } &&
-            excluded_hostnames.none? { |h| h.in? hostnames }
-        end
+    @matching_dns_records ||= dns_records.filter do |dns|
+      hostnames = dns.hostnames.map(&:name)
+      included_hostnames.all? { |h| h.in? hostnames } &&
+        excluded_hostnames.none? { |h| h.in? hostnames }
     end
+  end
+
+  def dns_records
+    DnsRecord.select(:id, :ip_address).joins(:hostnames).preload(:hostnames)
+             .where(hostnames: { name: included_hostnames }).uniq
   end
 
   def hostnames_by_occurrence
