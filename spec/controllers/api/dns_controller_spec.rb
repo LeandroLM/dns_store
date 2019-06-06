@@ -48,12 +48,12 @@ RSpec.describe Api::DnsController, type: :controller do
     let(:dns_record_5) { create(:dns_record, ip_address: '5.5.5.5') }
     let(:amet) { create(:hostname, name: 'amet.com') }
     let(:dolor) { create(:hostname, name: 'dolor.com') }
-    let(:ipsum) { create(:hostname, name: 'ipsom.com') }
+    let(:ipsum) { create(:hostname, name: 'ipsum.com') }
     let(:lorem) { create(:hostname, name: 'lorem.com') }
     let(:sit) { create(:hostname, name: 'sit.com') }
     let(:params) do
       {
-        include: ['ipsum', 'dolor.com'],
+        include: ['ipsum.com', 'dolor.com'],
         exclude: ['sit.com'],
         page: 1
       }
