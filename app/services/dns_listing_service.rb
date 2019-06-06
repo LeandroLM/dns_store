@@ -22,6 +22,7 @@ class DnsListingService
   def matching_dns_records
     @matching_dns_records ||= begin
       DnsRecord
+        .select(:id, :ip_address)
         .joins(:hostnames)
         .preload(:hostnames)
         .where(hostnames: { name: included_hostnames })
