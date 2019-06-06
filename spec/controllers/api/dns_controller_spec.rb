@@ -106,5 +106,12 @@ RSpec.describe Api::DnsController, type: :controller do
       expect(amet).to be_present
       expect(amet['matching_dns_records']).to eq 2
     end
+
+    it 'checks that page param is required' do
+      post :list, params: params.except(:page)
+
+      expect(response).to have_http_status(:bad_request)
+      expect(body['errors']).not_to be_empty
+    end
   end
 end

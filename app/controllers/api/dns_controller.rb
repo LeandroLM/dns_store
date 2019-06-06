@@ -1,5 +1,7 @@
 module Api
   class DnsController < ApplicationController
+    before_action :validate_params, only: :list
+
     def create
       if dns_service.create
         render json: DnsRecordSerializer.new(dns_service.dns)
@@ -20,6 +22,10 @@ module Api
 
     def dns_service
       @dns_service ||= CreateDnsService.new(dns_params)
+    end
+
+    def validate_params
+      params.require(:page)
     end
   end
 end
